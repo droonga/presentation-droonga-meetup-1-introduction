@@ -125,6 +125,11 @@ workerの数は以下の方法で調べた物を設定する（既定値は4）�
     % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | \
               grn2drn | droonga-request --host 192.168.200.254 --port 10031)
 
+または
+
+    % time (grndump $HOME/groonga/db/db | grn2drn | \
+              droonga-request --host 192.168.200.254 --port 10031)
+
 ## ベンチマーク実行環境のセットアップ
 
 192.168.200.2で行う。
