@@ -58,6 +58,10 @@
         --hosts=192.168.200.254,192.168.200.3,192.168.200.4 \
         --output=~/droonga/catalog.json
 
+workerの数は以下の方法で調べた物を設定する（既定値は4）。
+
+    % cat /proc/cpuinfo | grep processor
+
 ### サーバの起動
 
     (on 192.168.200.254)
