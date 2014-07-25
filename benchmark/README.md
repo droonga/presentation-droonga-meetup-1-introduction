@@ -20,6 +20,18 @@
        |
        +-[192.168.200.2] benchmark client
 
+ * 192.168.200.254
+   * OS: Ubuntu 14.04LTS
+   * CPU: Intel Core i5 M460 2.53GHz
+   * Memory: 8GB
+ * 192.168.200.3
+   * OS: Ubuntu 14.04LTS
+   * CPU: Intel Core i5 650 3.20GHz
+   * Memory: 6GB
+ * 192.168.200.4
+   * OS: Ubuntu 14.04LTS
+   * CPU: Intel Core i5 650 3.20GHz
+   * Memory: 8GB
 
 ## 準備
 
