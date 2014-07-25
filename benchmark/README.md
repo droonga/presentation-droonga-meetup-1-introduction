@@ -54,7 +54,9 @@
     % sudo gem install droonga-engine grn2drn drnbench
     % sudo npm install -g droonga-http-server
     % mkdir ~/droonga
-    % droonga-engine-catalog-generate --hosts=192.168.200.254,192.168.200.3,192.168.200.4 --output=~/droonga/catalog.json
+    % droonga-engine-catalog-generate \
+        --hosts=192.168.200.254,192.168.200.3,192.168.200.4 \
+        --output=~/droonga/catalog.json
 
 ### サーバの起動
 
@@ -82,9 +84,12 @@
 
 ### データベースの用意
 
-    % time (cat ~/wikipedia-search/config/groonga/schema.grn | grn2drn | droonga-request --host 192.168.200.254 --port 10031)
-    % time (cat ~/wikipedia-search/config/groonga/indexes.grn | grn2drn | droonga-request --host 192.168.200.254 --port 10031)
-    % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | grn2drn | droonga-request --host 192.168.200.254 --port 10031)
+    % time (cat ~/wikipedia-search/config/groonga/schema.grn | \
+              grn2drn | droonga-request --host 192.168.200.254 --port 10031)
+    % time (cat ~/wikipedia-search/config/groonga/indexes.grn | \
+              grn2drn | droonga-request --host 192.168.200.254 --port 10031)
+    % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | \
+              grn2drn | droonga-request --host 192.168.200.254 --port 10031)
 
 ## ベンチマーク実行環境のセットアップ
 
@@ -135,7 +140,10 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
 #### 1ノード（192.168.200.254）
 
     (on 192.168.200.254, 192.168.200.3, 192.168.200.4)
-    % droonga-engine-catalog-modify --source ~/droonga/catalog.json --update --remove-replica-hosts=192.168.200.3,192.168.200.4
+    % droonga-engine-catalog-modify \
+        --source ~/droonga/catalog.json \
+        --update \
+        --remove-replica-hosts=192.168.200.3,192.168.200.4
 
     (on 192.168.200.2)
     % drnbench-request-response \
@@ -154,7 +162,10 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
 #### 2ノード（192.168.200.254, 192.168.200.3）
 
     (on 192.168.200.254, 192.168.200.3, 192.168.200.4)
-    % droonga-engine-catalog-modify --source ~/droonga/catalog.json --update --add-replica-hosts=192.168.200.3
+    % droonga-engine-catalog-modify \
+        --source ~/droonga/catalog.json \
+        --update \
+        --add-replica-hosts=192.168.200.3
 
     (on 192.168.200.2)
     % drnbench-request-response \
@@ -173,7 +184,10 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
 #### 3ノード（192.168.200.254, 192.168.200.3, 192.168.200.3）
 
     (on 192.168.200.254, 192.168.200.3, 192.168.200.4)
-    % droonga-engine-catalog-modify --source ~/droonga/catalog.json --update --add-replica-hosts=192.168.200.4
+    % droonga-engine-catalog-modify \
+        --source ~/droonga/catalog.json \
+        --update \
+        --add-replica-hosts=192.168.200.4
 
     (on 192.168.200.2)
     % drnbench-request-response \
