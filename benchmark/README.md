@@ -16,6 +16,12 @@
     % bundle install
     % rake data:convert:groonga:ja
 
+既定の状態では、Wikipedia日本語版の全ページのうち先頭5000件、各ページは先頭から1000文字までのみ変換される。
+Wikipeida日本語版の全ページ・全内容を変換するには、以下の箇所で「--max-n-*」を指定しているコマンドラインオプションをコメントアウトする。
+（正しいやり方が分かり次第、この説明を更新する。）
+
+https://github.com/droonga/wikipedia-search/blob/master/lib/wikipedia-search/task.rb#L79
+
 ## Groongaのセットアップ
 
 192.168.200.254でのみ行う。
