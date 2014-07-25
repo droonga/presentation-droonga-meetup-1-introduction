@@ -57,6 +57,15 @@ https://github.com/droonga/wikipedia-search/blob/master/lib/wikipedia-search/tas
     % time (cat ~/wikipedia-search/config/groonga/indexes.grn | groonga $HOME/groonga/db/db)
     % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | groonga $HOME/groonga/db/db)
 
+検証環境ではこのくらいの時間がかかった。
+
+    [[0,1406253871.65481,38379.038287878],1840587]
+    
+    real    640m9.076s
+    user    149m33.176s
+    sys     4m38.246s
+
+
 ### HTTPサーバの起動
 
     % groonga -p 10041 -d --protocol http $HOME/groonga/db/db
