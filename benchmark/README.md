@@ -32,9 +32,9 @@
 
     % mkdir -p $HOME/groonga/db/
     % groonga -n $HOME/groonga/db/db quit
-    % cat ~/wikipedia-search/config/groonga/schema.grn | groonga $HOME/groonga/db/db
-    % cat ~/wikipedia-search/config/groonga/indexes.grn | groonga $HOME/groonga/db/db
-    % cat ~/wikipedia-search/data/groonga/ja-pages.grn | groonga $HOME/groonga/db/db
+    % time (cat ~/wikipedia-search/config/groonga/schema.grn | groonga $HOME/groonga/db/db)
+    % time (cat ~/wikipedia-search/config/groonga/indexes.grn | groonga $HOME/groonga/db/db)
+    % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | groonga $HOME/groonga/db/db)
 
 ### HTTPサーバの起動
 
@@ -82,9 +82,9 @@
 
 ### データベースの用意
 
-    % cat ~/wikipedia-search/config/groonga/schema.grn | grn2drn | droonga-request --host 192.168.200.254 --port 10031
-    % cat ~/wikipedia-search/config/groonga/indexes.grn | grn2drn | droonga-request --host 192.168.200.254 --port 10031
-    % cat ~/wikipedia-search/data/groonga/ja-pages.grn | grn2drn | droonga-request --host 192.168.200.254 --port 10031
+    % time (cat ~/wikipedia-search/config/groonga/schema.grn | grn2drn | droonga-request --host 192.168.200.254 --port 10031)
+    % time (cat ~/wikipedia-search/config/groonga/indexes.grn | grn2drn | droonga-request --host 192.168.200.254 --port 10031)
+    % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | grn2drn | droonga-request --host 192.168.200.254 --port 10031)
 
 ## ベンチマーク実行環境のセットアップ
 
