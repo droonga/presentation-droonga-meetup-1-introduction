@@ -71,49 +71,51 @@ GroongaからDroongaへ
  * *レプリケーションできる*ようになる
  * ノードを*簡単に追加・削除*できる
 
-# レプリケーションできないと
+# レプリケーション無しだと(1)
 
-![](images/service-groonga.png "単一のGroongaサーバにサービスが依存")
+![](images/service-groonga.png "単一のGroongaサーバに
+サービスが依存"){:relative_height='90'}
 
-# レプリケーションできないと
+# レプリケーション無しだと(1)
 
-![](images/service-groonga-dead-1.png "Groongaが死ぬと……")
+![](images/service-groonga-dead-1.png "Groongaが死ぬと……"){:relative_height='90'}
 
-# レプリケーションできないと
+# レプリケーション無しだと(1)
 
-![](images/service-groonga-dead-2.png "サービスも道連れになる")
+![](images/service-groonga-dead-2.png "サービスも道連れになる"){:relative_height='90'}
 
-# レプリケーションできないと
+# レプリケーション無しだと(2)
 
-![](images/service-groonga-overload.png "負荷が増大すると……")
+![](images/service-groonga-overload.png "負荷が増大すると……"){:relative_height='90'}
 
-# レプリケーションできないと
+# レプリケーション無しだと(2)
 
-![](images/service-groonga-overload-2.png "サービスレベルが落ちる")
+![](images/service-groonga-overload-2.png "サービスレベルが落ちる"){:relative_height='90'}
 
-# レプリケーションできると
+# レプリケーション有りだと(1)
 
-![](images/replication-write.png "データが自動的に複製される")
+![](images/replication-write.png "データが自動的に複製される"){:relative_height='90'}
 
-# レプリケーションできると
+# レプリケーション有りだと(1)
 
-![](images/replication-read-dead.png "耐障害性が高くなる")
+![](images/replication-read-dead.png "耐障害性が高くなる"){:relative_height='90'}
 
-# レプリケーションできると
+# レプリケーション有りだと(1)
 
-![](images/service-droonga.png "単一のサーバに依存しなくなる")
+![](images/service-droonga.png "単一のサーバに依存しなくなる"){:relative_height='90'}
 
-# レプリケーションできると
+# レプリケーション有りだと(1)
 
-![](images/service-droonga-dead.png "障害があってもサービスを提供し続けられる")
+![](images/service-droonga-dead.png "障害があってもサービスを
+提供し続けられる"){:relative_height='90'}
 
-# レプリケーションできると
+# レプリケーション有りだと(2)
 
-![](images/replication-read.png "負荷が分散される")
+![](images/replication-read.png "負荷が分散される"){:relative_height='90'}
 
-# レプリケーションできると
+# レプリケーション有りだと(2)
 
-![](images/service-droonga-overload.png "負荷の増大に対応しやすい")
+![](images/service-droonga-overload.png "負荷の増大に対応しやすい"){:relative_height='90'}
 
 
 # クラスタ構成の変更
@@ -138,11 +140,11 @@ GroongaからDroongaへ
 
 ## パーティショニング
 
-![](images/partition-write.png)
+![](images/partition-write.png){:relative_height='90'}
 
 ## パーティショニング
 
-![](images/partition-read.png)
+![](images/partition-read.png){:relative_height='90'}
 
 ## パーティショニング
 
@@ -175,7 +177,7 @@ GroongaからDroongaへ
  * 耐障害性の高さ、アクセスの増加への対応のしやすさとのトレードオフ。
 
 
-# 対応済みGroonga互換機能
+# 現時点での互換性
 
  * スキーマ変更
  * load, delete
