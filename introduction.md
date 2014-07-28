@@ -189,7 +189,27 @@ GroongaからDroongaへ
 
 # Groongaとの性能比較
 
+ * 検索対象：
+   Wikipedia日本語版の全ページ
+ * 検索クエリ：
+   よく見られているページのタイトル上位1000件
+ * キャッシュヒット率：
+   50％
+
+# Groongaとの性能比較
+
 （ここにグラフ）
+
+# Groongaとの性能比較
+
+ * Groonga
+   * サーバ1台の処理能力では有利
+   * 負荷が増えた時に
+     スループットが頭打ちになる
+ * Droonga
+   * サーバ1台の処理能力では不利
+   * 負荷が増えてもノードを増やして
+     スループットの上限を増やせる
 
 ## オーバーヘッド
 
@@ -201,8 +221,8 @@ GroongaからDroongaへ
 # 現時点での互換性（概要）
 
  * スキーマ変更系
- * load, delete
- * select
+ * `load`, `delete`
+ * `select`
 
 それ以外は未対応（今後の課題）
 
@@ -210,42 +230,42 @@ GroongaからDroongaへ
 
 table操作系
 
- * table_create
- * table_remove
- * table_list
+ * `table_create`
+ * `table_remove`
+ * `table_list`
 
 # 現時点での互換性（詳細）
 
 column操作系
 
- * column_create
- * column_remove
- * column_rename
- * column_list
+ * `column_create`
+ * `column_remove`
+ * `column_rename`
+ * `column_list`
 
 # 現時点での互換性（詳細）
 
 データ更新系
 
- * load
+ * `load`
    * ただし、以下は未対応
-     * --ifexists
-     * --input_type
- * delete
+     * `--ifexists`
+     * `--input_type`
+ * `delete`
 
 # 現時点での互換性（詳細）
 
 検索系
 
- * select
+ * `select`
    * ただし、以下は未対応
-     * --scorer
-     * --cache
-     * --match_escalation_threshold
-     * --query_expansion
-     * --query_flags
-     * --query_expander
-     * --adjuster
+     * `--scorer`
+     * `--cache`
+     * `--match_escalation_threshold`
+     * `--query_expansion`
+     * `--query_flags`
+     * `--query_expander`
+     * `--adjuster`
 
 ## 未対応の機能
 
@@ -279,6 +299,7 @@ column操作系
    ベンチマーク結果も添えて
  * 開発チームで認識できていない
    ボトルネックを明らかにしたい
+ * [ベンチマーク取得手順も公開中](https://github.com/droonga/presentation-droonga-meetup-1-introduction/tree/master/benchmark)
 
 # 改善にご協力を！
 
