@@ -182,6 +182,7 @@ GroongaからDroongaへ
 今現在あるデメリット
 
  * *レイテンシーが低下*する
+   * 処理のオーバーヘッドがある
  * *Groonga非互換*の部分が
    まだある
 
@@ -197,19 +198,58 @@ GroongaからDroongaへ
  * 耐障害性の高さ、アクセスの増加への対応のしやすさとのトレードオフ。
 
 
-# 現時点での互換性
+# 現時点での互換性（概要）
 
- * スキーマ変更
+ * スキーマ変更系
  * load, delete
  * select
 
 それ以外は未対応（今後の課題）
 
+# 現時点での互換性（詳細）
+
+table操作系
+
+ * table_create
+ * table_remove
+ * table_list
+
+# 現時点での互換性（詳細）
+
+column操作系
+
+ * column_create
+ * column_remove
+ * column_rename
+ * column_list
+
+# 現時点での互換性（詳細）
+
+データ更新系
+
+ * load
+   * ただし、以下は未対応
+     * --ifexists
+     * --input_type
+ * delete
+
+# 現時点での互換性（詳細）
+
+検索系
+
+ * select
+   * ただし、以下は未対応
+     * --scorer
+     * --cache
+     * --match_escalation_threshold
+     * --query_expansion
+     * --query_flags
+     * --query_expander
+     * --adjuster
+
 ## 未対応の機能
 
  * GQTPは喋れない
- * 未対応のコマンドや、コマンドによっては未対応のオプションがある
-   * 対応コマンドの一覧（主要なコマンドから実装している）
  * ダッシュボードがまだ無い（Groongaの管理画面はちょっと動く）
  * サジェストもまだ対応していない
  * 監視機能もまだできていない
