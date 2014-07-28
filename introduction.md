@@ -20,6 +20,14 @@ GroongaからDroongaへ
 今すぐ移行できるのか？」
 にお答えします
 
+# 気になる点、疑問点
+
+ * 気になる事があったら：
+   * メモして後から質問
+   * その場で質問してもOK
+ * どこが気になったかを
+   教えてください！
+
 
 # アジェンダ
 
@@ -27,7 +35,6 @@ GroongaからDroongaへ
    * Droongaの何が嬉しい？
    * Droongaの何が嬉しくない？
  * デモ
-
 
 
 # Groongaの困った所
@@ -64,11 +71,24 @@ GroongaからDroongaへ
  * *パーティショニング*
    * 現在は部分的に対応（これから改善）
 
+# レプリケーション？
+
+![](images/replication-write.png){:relative_width="35" align="left" relative_margin_left="-20"}
+
+![](images/replication-read.png){:relative_width="45" align="right"}
+
+# パーティショニング？
+
+![](images/partition-write.png){:relative_width="40" align="left" relative_margin_left="-20"}
+
+![](images/partition-read.png){:relative_width="50" align="right"}
+
 # Groonga→Droonga
 
 今現在得られるメリット
 
- * *レプリケーションできる*ようになる
+ * *レプリケーションできる*
+   ようになる
  * ノードを*簡単に追加・削除*できる
 
 # レプリケーション無しだと(1)
