@@ -131,24 +131,24 @@ workerの数は以下の方法で調べた物を設定する（既定値は4）�
 ### データベースの用意
 
     % time (cat ~/wikipedia-search/config/groonga/schema.grn | grn2drn | \
-              droonga-send --server=droonga:192.168.200.254:10031/droonga \
-                           --server=droonga:192.168.200.3:10031/droonga \
-                           --server=droonga:192.168.200.4:10031/droonga)
+              droonga-send --server=192.168.200.254 \
+                           --server=192.168.200.3 \
+                           --server=192.168.200.4)
     % time (cat ~/wikipedia-search/config/groonga/indexes.grn | grn2drn | \
-              droonga-send --server=droonga:192.168.200.254:10031/droonga \
-                           --server=droonga:192.168.200.3:10031/droonga \
-                           --server=droonga:192.168.200.4:10031/droonga)
+              droonga-send --server=192.168.200.254 \
+                           --server=192.168.200.3 \
+                           --server=192.168.200.4)
     % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | grn2drn | \
-              droonga-send --server=droonga:192.168.200.254:10031/droonga \
-                           --server=droonga:192.168.200.3:10031/droonga \
-                           --server=droonga:192.168.200.4:10031/droonga)
+              droonga-send --server=192.168.200.254 \
+                           --server=192.168.200.3 \
+                           --server=192.168.200.4)
 
 または
 
     % time (grndump $HOME/groonga/db/db | grn2drn | \
-              droonga-send --server=droonga:192.168.200.254:10031/droonga \
-                           --server=droonga:192.168.200.3:10031/droonga \
-                           --server=droonga:192.168.200.4:10031/droonga)
+              droonga-send --server=192.168.200.254 \
+                           --server=192.168.200.3 \
+                           --server=192.168.200.4)
 
 ## ベンチマーク実行環境のセットアップ
 
