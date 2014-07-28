@@ -196,6 +196,8 @@ GroongaからDroongaへ
  * キャッシュヒット率：
    50％
 
+[ベンチマーク取得手順](https://github.com/droonga/presentation-droonga-meetup-1-introduction/tree/master/benchmark)
+
 # Groongaとの性能比較
 
 （ここにグラフ）
@@ -299,7 +301,7 @@ column操作系
    ベンチマーク結果も添えて
  * 開発チームで認識できていない
    ボトルネックを明らかにしたい
- * [ベンチマーク取得手順も公開中](https://github.com/droonga/presentation-droonga-meetup-1-introduction/tree/master/benchmark)
+ * [ベンチマーク取得手順公開中](https://github.com/droonga/presentation-droonga-meetup-1-introduction/tree/master/benchmark)
 
 # 改善にご協力を！
 
