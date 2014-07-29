@@ -182,12 +182,113 @@ GroongaからDroongaへ
 
  * Groongaベースの
    アプリケーションを作成
+ * Droongaクラスタを構築
  * バックエンドをDroongaに移行
-   * Droongaクラスタを構築
    * データを移行
    * アプリケーションの接続先変更
 
+（[Groongaユーザ向けの、はじめてのDroonga](http://www.clear-code.com/blog/2014/7/11.html)
+　と同内容です）
 
+# デモ：用意する物
+
+ * サーバ2つ
+   * 192.168.100.50
+   * 192.168.100.51
+
+## 実行するコマンド
+
+Groongaのインストール
+
+    % sudo apt-get -y install software-properties-common
+    % sudo add-apt-repository -y universe
+    % sudo add-apt-repository -y ppa:groonga/ppa
+    % sudo apt-get update
+    % sudo apt-get -y install groonga
+
+データベース作成
+
+    % mkdir -p $HOME/groonga/db/
+    % groonga -n $HOME/groonga/db/db quit
+
+テーブル定義
+
+    % groonga $HOME/groonga/db/db table_create --name Topic --flags TABLE_PAT_KEY --key_type ShortText
+    % groonga $HOME/groonga/db/db column_create --table Topic --name title --flags COLUMN_SCALAR --type ShortText
+    % groonga $HOME/groonga/db/db table_create --name Term --flags TABLE_PAT_KEY --key_type ShortText -- d ef aul t_tokenizer TokenBigram --normalizer NormalizerAuto
+    % groonga $HOME/groonga/db/db column_create --table Term --name topic_title --flags "COLUMN_INDEX|WITH_POSITION" --type Topic --source title
+
+GroongaをHTTPサーバとして起動
+
+    % groonga -p 10041 -d --protocol http $HOME/groonga/db/db
+
+Webサーバを起動
+
+    % ruby -run -e httpd -- --port 8080 demo/ &
+
+Droongaのインストール
+
+    (on 192.168.100.50, 192.168.100.51)
+    % sudo apt-get update
+    % sudo apt-get -y upgrade
+    % sudo apt-get install -y libgroonga-dev ruby ruby-dev build-essential nodejs nodejs-legacy npm
+    % sudo gem install droonga-engine
+    % sudo npm install -g droonga-http-server
+    % mkdir ~/droonga
+    % droonga-engine-catalog-generate --hosts=192.168.100.50,192.168.100.51 --output=~/droonga/catalog.json
+
+サービス起動
+
+    (on 192.168.100.50)
+    % export host=192.168.100.50
+    % export DROONGA_BASE_DIR=$HOME/droonga
+    % droonga-engine \
+        --host=$host \
+        --log-file=$DROONGA_BASE_DIR/droonga-engine.log \
+        --daemon \
+        --pid-file=$DROONGA_BASE_DIR/droonga-engine.pid
+    % droonga-http-server \
+        --port=10042 \
+        --receive-host-name=$host \
+        --droonga-engine-host-name=$host \
+        --production=production \
+        --daemon \
+        --pid-file=$DROONGA_BASE_DIR/droonga-http-server.pid
+
+    (on 192.168.100.51)
+    % export host=192.168.100.51
+    % export DROONGA_BASE_DIR=$HOME/droonga
+    % droonga-engine \
+        --host=$host \
+        --log-file=$DROONGA_BASE_DIR/droonga-engine.log \
+        --daemon \
+        --pid-file=$DROONGA_BASE_DIR/droonga-engine.pid
+    % droonga-http-server \
+        --port=10042 \
+        --receive-host-name=$host \
+        --droonga-engine-host-name=$host \
+        --production=production \
+        --daemon \
+        --pid-file=$DROONGA_BASE_DIR/droonga-http-server.pid
+
+動作確認
+
+    % curl "http://192.168.100.50:10042/droonga/system/status"
+
+データの引き継ぎに必要なツール
+
+    % sudo gem install grn2drn droonga-client
+
+データの引き継ぎ
+
+    % grndump ~/groonga/db/db | grn2drn | \
+        droonga-send --server=192.168.100.50
+
+接続先の切り替え
+
+    % vi demo/index.html
+    -  var base = 'http://' + location.hostname + ':10041';
+    +  var base = 'http://' + location.hostname + ':10042';
 
 
 

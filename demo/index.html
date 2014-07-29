@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<title>TODO List</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<p><input type="text" size="30" id="title-field"><button id="add-button">登録</button></p>
+<p><input type="text" size="20" id="search-field">
+   <button id="search-button">検索</button></p>
+<div id="result"></div>
+<script type="text/javascript"><!--
+  var base = 'http://' + location.hostname + ':10041';
+
+  // レコードを追加する。
+  $('#add-button').click(function() {
+    var title = $('#title-field').val();
+    if (!title)
+      return;
+    $.ajax({
+      url:      base + '/d/load',
+      data:     {
+        table:  'Topic',
+        values: JSON.stringify([{
+          _key:  title,
+          title: title
+        }])
+      },
+      dataType: 'jsonp',
+      success:  function() {
+        $('#title-field').val('');
+      }
+    });
+  });
+
+  // レコードを検索する。
+  $('#search-button').click(function() {
+    var data = {
+      table:          'Topic',
+      output_columns: 'title',
+      limit:          10
+    };
+    var term = $('#search-field').val();
+    if (term)
+      data.filter = 'title @ ' + JSON.stringify(term);
+    $.ajax({
+      url:      base + '/d/select',
+      data:     data,
+      dataType: 'jsonp',
+      success:  function(result) {
+        if (!result)
+          return;
+        var body = result[1];
+        var searchResult = body[0];
+        var count = searchResult[0][0];
+        var topics = searchResult.slice(2);
+        $('#result')
+          .empty()
+          .append($('<p>').text(count + '件見つかりました。'))
+          .append($('<ul>')
+                    .append(topics.map(function(topic) {
+                      var title = topic[0];
+                      return $('<li>').text(title);
+                    })));
+      }
+    });
+  });
+// --></script>
