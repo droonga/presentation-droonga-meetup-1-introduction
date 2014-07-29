@@ -69,17 +69,25 @@ Wikipediaのデータを取得し、Groongaのダンプファイルに変換す�
     % bundle install
     % time rake data:convert:groonga:ja
 
-既定の状態では、Wikipedia日本語版の全ページのうち先頭5000件、各ページは先頭から1000文字までのみ変換される。
+既定の状態では、Wikipedia日本語版の全ページのうち先頭5000件、各ページは先頭から最大1000文字までのみ変換される。
 それ以上の件数を変換するには、以下の箇所で「--max-n-*」を指定しているコマンドラインオプションを変更する。
 （正しいやり方が分かり次第、この説明を更新する。）
 
 https://github.com/droonga/wikipedia-search/blob/master/lib/wikipedia-search/task.rb#L79
 
-検証時には、184万件のページ全件をロードするとデータベースは17GiB程度になった。
-大雑把に考えて、10万件で1GiBになる。
-前述の計算から、データベースサイズは1.5GiB程度までに収める必要があるので、ロードするべきページの件数は15万件程度が妥当と言える。
+件数とデータベースサイズは残念ながら比例関係にない。
+以下は、実際の変換結果。
 
-検証環境では、15万件のデータの変換には12分程度を要した。
+ * 184万件のページ全件をロードすると、データベースは17GiB程度になった。
+   （Groongaへのロードには10時間程度を要した）
+ * 15万件のページをロードすると、データベースは3GiB程度になった。
+   （変換には12分程度、Groongaへのロードには24分程度を要した）
+ * 7万5千件のページをロードすると、データベースは1.9GiB程度になった。
+   （変換には7分程度、Groongaへのロードには12分程度を要した）
+ * 30万件のページを各ページごとに最大1000文字までロードすると、データベースは1.1GiB程度になった。
+   （変換には17分程度、Groongaへのロードには6分程度を要した）
+
+以上のことから、今回は30万件のページを各ページごとに最大1000文字まで変換したデータに基づく1.1GiBのデータベースを使用した。
 
 
 ## Groongaのセットアップ
@@ -102,9 +110,6 @@ https://github.com/droonga/wikipedia-search/blob/master/lib/wikipedia-search/tas
     % time (cat ~/wikipedia-search/config/groonga/schema.grn | groonga $HOME/groonga/db/db)
     % time (cat ~/wikipedia-search/config/groonga/indexes.grn | groonga $HOME/groonga/db/db)
     % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | groonga $HOME/groonga/db/db)
-
-検証環境では、184万件全件のロードだと10時間程度を要した。
-15万件のロードだと、24分を要した。
 
 ### HTTPサーバの起動
 
@@ -184,8 +189,6 @@ droonga-sendを使うが、スキーマ定義の時は宛先は1ノードだけ�
                            --server=192.168.200.3 \
                            --server=192.168.200.4 \
                            --report-throughput)
-
-検証環境では、15万件のロードだとXX分を要した。
 
 ## ベンチマーク実行環境のセットアップ
 
