@@ -2,15 +2,47 @@ require "json"
 
 body = JSON.parse(STDIN.read).last.last
 records = body[2..-1]
+with_query_params = {
+  "table"            => "Pages",
+  "limit"            => 50,
+  "match_columns"    => "title,text",
+  "output_columns"   => "snippet_html(title),snippet_html(text),categories,_key",
+  "drilldown"        => "categories",
+  "drilldown_limits" => 50,
+  "drilldown_sortby" => "-_nsubrecs",
+}
+
+def to_query_params(params)
+  params.collect do |key, value|
+    value = value.to_s
+                 .gsub(/[:;]/, " ")
+                 .strip
+                 .gsub(/ +/, "%20")
+    "#{key}=#{value}"
+  end.join("&")
+end
+
 $with_query_patterns = records.collect do |record|
   title = record.first
-  query = title.gsub(/[:;]/, " ")
-               .strip
-               .gsub(/ +/, "%20")
+  params = with_query_params.merge("query" => title)
   {
-    "path" => "/d/select?query=#{query}&table=Pages&limit=50&match_columns=title,text&output_columns=snippet_html(title),snippet_html(text),categories,_key&drilldown=categories&drilldown_limits=50&drilldown_sortby=-_nsubrecs"
+    "path" => "/d/select?#{to_query_params(params)}",
   }
 end
+
+without_query_pattern_params = {
+  "table"            => "Pages",
+  "limit"            => 50,
+  "output_columns"   => "title,categories,_key",
+  "drilldown"        => "categories",
+  "drilldown_limits" => 50,
+  "drilldown_sortby" => "-_nsubrecs",
+}
+$without_query_patterns = [
+  {
+    "path" => "/d/select?#{to_query_params(without_query_pattern_params)}",
+  },
+]
 
 def add_patterns(patterns, host=nil, frequency=1.0)
   suffix = ""
@@ -19,17 +51,12 @@ def add_patterns(patterns, host=nil, frequency=1.0)
   patterns["with-query#{suffix}"] = {
     "frequency" => frequency / 2.0,
     "method"    => "get",
-    "patterns"  => $with_query_patterns
+    "patterns"  => $with_query_patterns,
   }
-
   patterns["without-query#{suffix}"] = {
     "frequency" => frequency / 2.0,
     "method"    => "get",
-    "patterns"  => [
-      {
-        "path" => "/d/select?table=Pages&limit=50&output_columns=title,categories,_key&drilldown=categories&d rilldown_limits =50&drilldown_sortby=-_nsubrecs"
-      }
-    ]
+    "patterns"  => $without_query_patterns,
   }
 
   if host
