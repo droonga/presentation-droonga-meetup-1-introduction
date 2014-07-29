@@ -193,7 +193,7 @@ droonga-sendを使うが、スキーマ定義の時は宛先は1ノードだけ�
 
     % sudo apt-get update
     % sudo apt-get -y upgrade
-    % sudo apt-get install -y ruby
+    % sudo apt-get install -y ruby curl
     % sudo gem install drnbench
 
 ページのタイトルから、検索リクエストのパターンファイルを作成する。
