@@ -104,7 +104,7 @@ https://github.com/droonga/wikipedia-search/blob/master/lib/wikipedia-search/tas
     % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | groonga $HOME/groonga/db/db)
 
 検証環境では、184万件全件のロードだと10時間程度を要した。
-
+15万件のロードだと、24分を要した。
 
 ### HTTPサーバの起動
 
@@ -185,6 +185,8 @@ droonga-sendを使うが、スキーマ定義の時は宛先は1ノードだけ�
                            --server=192.168.200.4 \
                            --report-throughput)
 
+検証環境では、15万件のロードだとXX分を要した。
+
 ## ベンチマーク実行環境のセットアップ
 
 192.168.200.2で行う。
@@ -196,21 +198,20 @@ droonga-sendを使うが、スキーマ定義の時は宛先は1ノードだけ�
 
 ページのタイトルから、検索リクエストのパターンファイルを作成する。
 
-    % echo '{"wikiledia-ja-search-with-query":{"frequency":0.5,"method":"get","patterns":[' \
-        > patterns.json
-    % curl 'http://stats.grok.se/ja/top' | grep "a href" | \
-        sed -r -e 's/\&[^;]+;//g' \
-               -e 's/[:;]/ /g' \
-               -e 's;.+>([^<]+)</a>.*;{"path":"/d/select?query=\1\&table=Pages\&limit=50\&match_columns=title,text\&output_columns=snippet_html(title),snippet_html(text),categories,_key\&drilldown=categories\&drilldown_limits=50\&drilldown_sortby=-_nsubrecs"},;' \
-               -e 's/ /%20/g' \
-        >> patterns.json
-    % echo '{"path":"/d/select?table=Pages&limit=10"}]},"wikiledia-ja-search":{"frequency":0.5,"method":"get","patterns":[{"path":"/d/select?table=Pages&limit=50&output_columns=title,categories,_key&drilldown=categories&drilldown_limits=50&drilldown_sortby=-_nsubrecs"}]}}' \
-        >> patterns.json
+    % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=1000&output_columns=title" | \
+        ruby ./generate-patterns.rb \
+        > ./patterns-1node.json
+    % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=1000&output_columns=title" | \
+        ruby ./generate-patterns.rb 192.168.200.254,192.168.200.3 \
+        > ./patterns-2nodes.json
+    % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=1000&output_columns=title" | \
+        ruby ./generate-patterns.rb 192.168.200.254,192.168.200.3,192.168.200.4 \
+        > ./patterns-3nodes.json
 
-patterns-2nodes.json, patterns-3nodes.jsonは、これを元に、接続先をそれぞれのノードに等分に振り分けるようにした物。
+patterns-2nodes.json, patterns-3nodes.jsonは、接続先をそれぞれのノードに等分に振り分けるようにした物。
 droonga-engineやdroonga-http-serverのプロセスがボトルネックになっている場合はこれを使い、各ノードの性能を使い切るようにする。
 
-最後の行で追加しているリクエストは、Webサービスのトップページから投げられるであろうリクエストに対応するものである。
+各パターンの最後に追加しているリクエストは、Webサービスのトップページから投げられるであろうリクエストに対応するものである。
 これが全体の50％になるようにしてあり、リクエストの内容は固定なので、キャッシュヒット率は理論上は50％程度になるはず。
 
 ## ベンチマークの実行
