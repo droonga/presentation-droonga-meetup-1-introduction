@@ -41,7 +41,7 @@ without_query_pattern_params = {
 $without_query_patterns = [
   {
     "path" => "/d/select?#{to_query_params(without_query_pattern_params)}",
-  },
+  }
 ]
 
 def add_patterns(patterns, host=nil, frequency=1.0)
