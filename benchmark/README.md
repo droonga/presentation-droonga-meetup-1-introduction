@@ -35,11 +35,13 @@
 
 ## 準備
 
-### worker数とデータベースサイズの決定
+### worker数の決定
 
 worker数は、CPUの個数に合わせる。これは以下の方法で調べられる。
 
     % cat /proc/cpuinfo | grep processor | wc -l
+
+### データベースサイズの決定
 
 Droongaのworkerは、1プロセスあたり最大でデータベースの大きさと同じだけのメモリを消費する。
 例えばworker数4でデータベースサイズが2GiBなら、消費するメモリの量は最大で2×4＝8GiBとなる。
@@ -47,6 +49,11 @@ Droongaのworkerは、1プロセスあたり最大でデータベースの大き
 データベースサイズが実メモリの量より大きいと、スワップが発生して性能が低下する。
 しかしデータベースサイズが小さすぎると、検索の処理が軽すぎてベンチマークを取りにくくなる。
 よって、データベースサイズが実メモリをギリギリ使い切らない程度のサイズになるようにする必要がある。
+
+ * Groongaではシングルプロセス・マルチスレッドのため、データベースの最大サイズは実メモリの量にほぼ等しい。
+   それに対しDroongaでは、プロセスごとに別々にデータベースをメモリ上に保持するため、1プロセスあたりが使えるメモリの最大サイズ＝データベースの最大サイズは、Groongaよりも小さくなる。
+   * この成約
+ * 当然のことながら、実際に運用中のサービスがあるのであれば、データベースサイズは運用中のサービスのデータベースサイズと同等にすることが望ましい。
 
 上記の検証環境では、ノードのうち2台が8GB、1台が6GBのメモリを積んでいる。
 なので、6÷4＝1.5GB程度のデータベースサイズが適切と考えられる。
@@ -71,6 +78,8 @@ https://github.com/droonga/wikipedia-search/blob/master/lib/wikipedia-search/tas
 大雑把に考えて、10万件で1GiBになる。
 前述の計算から、データベースサイズは1.5GiB程度までに収める必要があるので、ロードするべきページの件数は15万件程度が妥当と言える。
 
+検証環境では、15万件のデータの変換には12分程度を要した。
+
 
 ## Groongaのセットアップ
 
@@ -93,7 +102,7 @@ https://github.com/droonga/wikipedia-search/blob/master/lib/wikipedia-search/tas
     % time (cat ~/wikipedia-search/config/groonga/indexes.grn | groonga $HOME/groonga/db/db)
     % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | groonga $HOME/groonga/db/db)
 
-検証環境では、184万件全件のロードだと10時間程度かかった。
+検証環境では、184万件全件のロードだと10時間程度を要した。
 
 
 ### HTTPサーバの起動
@@ -117,27 +126,27 @@ https://github.com/droonga/wikipedia-search/blob/master/lib/wikipedia-search/tas
     % mkdir ~/droonga
     % droonga-engine-catalog-generate \
         --hosts=192.168.200.254,192.168.200.3,192.168.200.4 \
+        --n-workers=$(cat /proc/cpuinfo | grep processor | wc -l) \
         --output=~/droonga/catalog.json
 
-workerの数は以下の方法で調べた物を設定する（既定値は4）。
-
-    % cat /proc/cpuinfo | grep processor
 
 ### サーバの起動
 
     (on 192.168.200.254)
     % export host=192.168.200.254
     % export DROONGA_BASE_DIR=$HOME/droonga
-    % droonga-engine --host=$host \
-                 --log-file=$DROONGA_BASE_DIR/droonga-engine.log \
-                 --daemon \
-                 --pid-file=$DROONGA_BASE_DIR/droonga-engine.pid
-    % env NODE_ENV=production \
-        droonga-http-server --port=10042 \
-                        --receive-host-name=$host \
-                        --droonga-engine-host-name=$host \
-                        --daemon \
-                        --pid-file=$DROONGA_BASE_DIR/droonga-http-server.pid
+    % droonga-engine \
+        --host=$host \
+        --log-file=$DROONGA_BASE_DIR/droonga-engine.log \
+        --daemon \
+        --pid-file=$DROONGA_BASE_DIR/droonga-engine.pid
+    % droonga-http-server \
+        --port=10042 \
+        --receive-host-name=$host \
+        --droonga-engine-host-name=$host \
+        --environment=production \
+        --daemon \
+        --pid-file=$DROONGA_BASE_DIR/droonga-http-server.pid
 
     (on 192.168.200.3)
     % export host=192.168.200.3
