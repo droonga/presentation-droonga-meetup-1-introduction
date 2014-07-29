@@ -177,6 +177,20 @@ GroongaからDroongaへ
 
 
 
+
+# デモ
+
+ * Groongaベースの
+   アプリケーションを作成
+ * バックエンドをDroongaに移行
+   * Droongaクラスタを構築
+   * データを移行
+   * アプリケーションの接続先変更
+
+
+
+
+
 # Groonga→Droonga
 
 今現在あるデメリット
@@ -186,17 +200,14 @@ GroongaからDroongaへ
  * *Groonga非互換*の部分が
    まだある
 
-
 # Groongaとの性能比較
 
  * 検索対象：
-   Wikipedia日本語版の全ページのうち
-   先頭から15万件を使用
+   Wikipedia日本語版のページ15万件
+   （データベースサイズ 約1.5GiB）
  * 検索クエリ：
-   ロードしたページのうち
-   1000件のタイトルを使用
- * キャッシュヒット率：
-   50％
+   ページのタイトル1000件
+ * キャッシュヒット率：50％
 
 [ベンチマーク取得手順](https://github.com/droonga/presentation-droonga-meetup-1-introduction/tree/master/benchmark)
 
@@ -280,19 +291,9 @@ column操作系
 
 # とはいえ
 
-![](images/groonga-vs-droonga-compatible-http.png "使用中の機能の範囲次第では
+![](images/groonga-vs-droonga-compatible-http.png "Groongaの利用状況次第では
 今すぐにでもDroongaに移行できる！"){:relative_height="90"}
 
-
-
-# デモ
-
- * Groongaベースの
-   アプリケーションを作成
- * バックエンドをDroongaに移行
-   * Droongaクラスタを構築
-   * データを移行
-   * アプリケーションの接続先変更
 
 
 # 改善にご協力を！
