@@ -130,25 +130,31 @@ workerの数は以下の方法で調べた物を設定する（既定値は4）�
 
 ### データベースの用意
 
+ダンプからデータベースの内容を用意する。
+droonga-sendを使うが、スキーマ定義の時は宛先は1ノードだけにする。
+（複数ノードにリクエストを分散すると、スキーマ定義が期待通りに行われないため。
+データ投入の時は、負荷分散のため、宛先は3ノードに分散してもよい。
+
     % time (cat ~/wikipedia-search/config/groonga/schema.grn | grn2drn | \
-              droonga-send --server=192.168.200.254 \
-                           --server=192.168.200.3 \
-                           --server=192.168.200.4)
+              droonga-send --server=192.168.200.254)
     % time (cat ~/wikipedia-search/config/groonga/indexes.grn | grn2drn | \
-              droonga-send --server=192.168.200.254 \
-                           --server=192.168.200.3 \
-                           --server=192.168.200.4)
+              droonga-send --server=192.168.200.254)
     % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | grn2drn | \
               droonga-send --server=192.168.200.254 \
                            --server=192.168.200.3 \
                            --server=192.168.200.4)
 
-または
+データベースの内容をダンプして直接流し込む場合も同様に、スキーマ定義とデータ投入で分散の有無を分ける必要がある。
 
-    % time (grndump $HOME/groonga/db/db | grn2drn | \
+    % time (grndump --no-dump-tables $HOME/groonga/db/db | grn2drn | \
+              droonga-send --server=192.168.200.254 \
+                           --report-throughput)
+    % time (grndump --no-dump-schema --no-dump-indexes $HOME/groonga/db/db | \
+              grn2drn | \
               droonga-send --server=192.168.200.254 \
                            --server=192.168.200.3 \
-                           --server=192.168.200.4)
+                           --server=192.168.200.4 \
+                           --report-throughput)
 
 ## ベンチマーク実行環境のセットアップ
 
