@@ -253,7 +253,7 @@ Droongaのインストール
         --port=10042 \
         --receive-host-name=$host \
         --droonga-engine-host-name=$host \
-        --production=production \
+        --environment=production \
         --daemon \
         --pid-file=$DROONGA_BASE_DIR/droonga-http-server.pid
 
@@ -269,7 +269,7 @@ Droongaのインストール
         --port=10042 \
         --receive-host-name=$host \
         --droonga-engine-host-name=$host \
-        --production=production \
+        --environment=production \
         --daemon \
         --pid-file=$DROONGA_BASE_DIR/droonga-http-server.pid
 
