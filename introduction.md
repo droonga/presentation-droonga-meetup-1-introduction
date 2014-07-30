@@ -1,7 +1,8 @@
 # はじめてのDroonga
 
 subtitle
-:   Droongaの簡単な紹介と、
+:   　　
+    Droongaの簡単な紹介と
     Groongaからの移行手順
 
 author
