@@ -191,21 +191,21 @@ droonga-sendを使うが、スキーマ定義の時は宛先は1ノードだけ�
 
 ページのタイトルから、検索リクエストのパターンファイルを作成する。
 
-    % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=1000&output_columns=title" | \
+    % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=200&output_columns=title" | \
         ruby ./generate-patterns.rb \
         > ./patterns-1node.json
-    % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=1000&output_columns=title" | \
+    % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=200&output_columns=title" | \
         ruby ./generate-patterns.rb 192.168.200.254,192.168.200.3 \
         > ./patterns-2nodes.json
-    % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=1000&output_columns=title" | \
+    % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=200&output_columns=title" | \
         ruby ./generate-patterns.rb 192.168.200.254,192.168.200.3,192.168.200.4 \
         > ./patterns-3nodes.json
 
 patterns-2nodes.json, patterns-3nodes.jsonは、接続先をそれぞれのノードに等分に振り分けるようにした物。
 droonga-engineやdroonga-http-serverのプロセスがボトルネックになっている場合はこれを使い、各ノードの性能を使い切るようにする。
 
-各パターンの最後に追加しているリクエストは、Webサービスのトップページから投げられるであろうリクエストに対応するものである。
-これが全体の50％になるようにしてあり、リクエストの内容は固定なので、キャッシュヒット率は理論上は50％程度になるはず。
+クエリの件数は200件としている。
+Groonga、Droonga共にデフォルトのキャッシュ件数は100件なので、200種類のリクエストがあると、理論上のキャッシュヒット率は50％程度になると考えられる。
 
 ## ベンチマークの実行
 
@@ -220,16 +220,15 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
     % drnbench-request-response \
         --n-slow-requests=5 \
         --start-n-clients=0 \
-        --end-n-clients=50 \
+        --end-n-clients=20 \
         --step=2 \
-        --duration=10 \
+        --duration=30 \
         --wait=0.01 \
         --interval=10 \
         --mode=http \
         --request-patterns-file=$PWD/patterns-1node.json \
         --default-host=192.168.200.254 \
         --default-port=10041 \
-        --default-timeout=5 \
         --output-path=$PWD/groonga-result.csv
 
     (on 192.168.200.254)
@@ -268,16 +267,15 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
     % drnbench-request-response \
         --n-slow-requests=5 \
         --start-n-clients=0 \
-        --end-n-clients=50 \
+        --end-n-clients=20 \
         --step=2 \
-        --duration=10 \
+        --duration=30 \
         --wait=0.01 \
         --interval=10 \
         --mode=http \
         --request-patterns-file=$PWD/patterns-1node.json \
         --default-host=192.168.200.254 \
         --default-port=10042 \
-        --default-timeout=5 \
         --output-path=$PWD/droonga-result-1node.csv
 
 #### 2ノード（192.168.200.254, 192.168.200.3）
@@ -292,16 +290,15 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
     % drnbench-request-response \
         --n-slow-requests=5 \
         --start-n-clients=0 \
-        --end-n-clients=50 \
+        --end-n-clients=20 \
         --step=2 \
-        --duration=10 \
+        --duration=30 \
         --wait=0.01 \
         --interval=10 \
         --mode=http \
         --request-patterns-file=$PWD/patterns-2nodes.json \
         --default-host=192.168.200.254 \
         --default-port=10042 \
-        --default-timeout=5 \
         --output-path=$PWD/droonga-result-2nodes.csv
 
 #### 3ノード（192.168.200.254, 192.168.200.3, 192.168.200.3）
@@ -316,15 +313,14 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
     % drnbench-request-response \
         --n-slow-requests=5 \
         --start-n-clients=0 \
-        --end-n-clients=50 \
+        --end-n-clients=20 \
         --step=2 \
-        --duration=10 \
+        --duration=30 \
         --wait=0.01 \
         --interval=10 \
         --mode=http \
         --request-patterns-file=$PWD/patterns-3nodes.json \
         --default-host=192.168.200.254 \
         --default-port=10042 \
-        --default-timeout=5 \
         --output-path=$PWD/droonga-result-3nodes.csv
 
