@@ -323,7 +323,11 @@ Droongaのインストール
 
 # Groongaとの性能比較
 
-（ここにグラフ）
+![](images/benchmark-qps.png){:relative_height='90'}
+
+# Groongaとの性能比較
+
+![](images/benchmark-elapsedtime.png){:relative_height='90'}
 
 # Groongaとの性能比較
 
