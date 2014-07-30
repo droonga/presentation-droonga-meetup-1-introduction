@@ -228,6 +228,7 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
         --request-patterns-file=$PWD/patterns-1node.json \
         --default-host=192.168.200.254 \
         --default-port=10041 \
+        --default-timeout=5 \
         --output-path=$PWD/groonga-result.csv
 
 ### Droongaのベンチマーク
@@ -252,6 +253,7 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
         --request-patterns-file=$PWD/patterns-1node.json \
         --default-host=192.168.200.254 \
         --default-port=10042 \
+        --default-timeout=5 \
         --output-path=$PWD/droonga-result-1node.csv
 
 #### 2ノード（192.168.200.254, 192.168.200.3）
@@ -274,6 +276,7 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
         --request-patterns-file=$PWD/patterns-2nodes.json \
         --default-host=192.168.200.254 \
         --default-port=10042 \
+        --default-timeout=5 \
         --output-path=$PWD/droonga-result-2nodes.csv
 
 #### 3ノード（192.168.200.254, 192.168.200.3, 192.168.200.3）
@@ -296,5 +299,6 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
         --request-patterns-file=$PWD/patterns-3nodes.json \
         --default-host=192.168.200.254 \
         --default-port=10042 \
+        --default-timeout=5 \
         --output-path=$PWD/droonga-result-3nodes.csv
 
