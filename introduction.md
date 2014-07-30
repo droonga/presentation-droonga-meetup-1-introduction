@@ -298,6 +298,8 @@ Droongaのインストール
 
  * *レイテンシーが低下*する
    * 処理のオーバーヘッドがある
+   * ドリルダウンが遅い
+   * レスポンスが大きいと遅い
  * *Groonga非互換*の部分が
    まだある
 
@@ -314,7 +316,7 @@ Droongaのインストール
    30万件の本文を1000文字までで切り出し
    （データベースサイズ 約1.1GiB）
  * 検索クエリ：
-   ページのタイトル200件
+   ページのタイトル200件・ドリルダウン無し
    （キャッシュヒット率50％）
 
 [ベンチマーク取得手順](https://github.com/droonga/presentation-droonga-meetup-1-introduction/tree/master/benchmark)
