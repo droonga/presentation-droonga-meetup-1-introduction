@@ -8,7 +8,7 @@ with_query_params = {
   "match_columns"    => "title,text",
   "output_columns"   => "snippet_html(title),snippet_html(text),categories,_key",
   "drilldown"        => "categories",
-  "drilldown_limits" => 50,
+  "drilldown_limits" => 5,
   "drilldown_sortby" => "-_nsubrecs",
 }
 
@@ -35,7 +35,7 @@ without_query_pattern_params = {
   "limit"            => 50,
   "output_columns"   => "title,categories,_key",
   "drilldown"        => "categories",
-  "drilldown_limits" => 50,
+  "drilldown_limits" => 10,
   "drilldown_sortby" => "-_nsubrecs",
 }
 $without_query_patterns = [
