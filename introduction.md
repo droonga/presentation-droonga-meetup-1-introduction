@@ -11,6 +11,9 @@ author
 institution
 :   株式会社クリアコード
 
+allotted_time
+:   30m
+
 theme
 :   groonga
 
