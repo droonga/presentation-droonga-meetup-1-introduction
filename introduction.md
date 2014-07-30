@@ -184,8 +184,6 @@ GroongaからDroongaへ
    アプリケーションを作成
  * Droongaクラスタを構築
  * バックエンドをDroongaに移行
-   * データを移行
-   * アプリケーションの接続先変更
 
 （[Groongaユーザ向けの、はじめてのDroonga](http://www.clear-code.com/blog/2014/7/11.html)
 　と同内容です）
@@ -298,25 +296,16 @@ Droongaのインストール
 
  * *レイテンシーが低下*する
    * 処理のオーバーヘッドがある
-   * ドリルダウンが遅い
-   * レスポンスが大きいと遅い
  * *Groonga非互換*の部分が
    まだある
-
-## 具体的に遅くなる例
-
- * ドリルダウンがあると遅くなる。
- * レスポンスのサイズが大きくなると遅くなる。
-   （内部で頻繁にJSONをパースしているため）
 
 # Groongaとの性能比較
 
  * 検索対象：
-   Wikipedia日本語版のページ
-   30万件の本文を1000文字までで切り出し
+   Wikipedia日本語版のページ30万件
    （データベースサイズ 約1.1GiB）
  * 検索クエリ：
-   ページのタイトル200件・ドリルダウン無し
+   ページのタイトル200件
    （キャッシュヒット率50％）
 
 [ベンチマーク取得手順](https://github.com/droonga/presentation-droonga-meetup-1-introduction/tree/master/benchmark)
@@ -339,6 +328,13 @@ Droongaのインストール
    * サーバ1台の処理能力では不利
    * 負荷が増えてもノードを増やして
      スループットの上限を増やせる
+
+# 今分かっている遅くなる理由
+
+ * ドリルダウンがあると遅くなる
+ * レスポンスのサイズが大きくなると遅くなる
+ * クラスタ構成に合わせた
+   処理の最適化が不十分
 
 ## オーバーヘッド
 
@@ -378,8 +374,7 @@ column操作系
 
  * `load`
    * ただし、以下は未対応
-     * `--ifexists`
-     * `--input_type`
+     `--ifexists`, `--input_type`
  * `delete`
 
 # 現時点での互換性（詳細）
@@ -388,13 +383,11 @@ column操作系
 
  * `select`
    * ただし、以下は未対応
-     * `--scorer`
-     * `--cache`
-     * `--match_escalation_threshold`
-     * `--query_expansion`
-     * `--query_flags`
-     * `--query_expander`
-     * `--adjuster`
+     `--scorer`, `--cache`,
+     `--match_escalation_threshold`,
+     `--query_expansion`,
+     `--query_flags`, `--query_expander`,
+     `--adjuster`
 
 ## 未対応の機能
 
