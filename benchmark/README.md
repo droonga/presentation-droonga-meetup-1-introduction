@@ -242,6 +242,7 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
     (on 192.168.200.254, 192.168.200.3, 192.168.200.4)
     % kill $(cat ~/droonga/droonga-engine.pid)
     % kill $(cat ~/droonga/droonga-http-server.pid)
+    % rm -rf ~/droonga/state
     % droonga-engine \
         --host=$host \
         --log-file=$DROONGA_BASE_DIR/droonga-engine.log \
