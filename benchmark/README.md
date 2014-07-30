@@ -103,10 +103,6 @@ https://github.com/droonga/wikipedia-search/blob/master/lib/wikipedia-search/tas
     % time (cat ~/wikipedia-search/config/groonga/indexes.grn | groonga $HOME/groonga/db/db)
     % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | groonga $HOME/groonga/db/db)
 
-### HTTPサーバの起動
-
-    % groonga -p 10041 -d --protocol http $HOME/groonga/db/db
-
 
 ## Droongaクラスタのセットアップ
 
@@ -217,13 +213,18 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
 
 ### Groongaのベンチマーク
 
+    (on 192.168.200.254)
+    % groonga -p 10041 -d --protocol http $HOME/groonga/db/db
+
+    (on 192.168.200.2)
     % drnbench-request-response \
         --n-slow-requests=5 \
         --start-n-clients=0 \
-        --end-n-clients=100 \
-        --step=10 \
+        --end-n-clients=50 \
+        --step=2 \
         --duration=10 \
         --wait=0.01 \
+        --interval=10 \
         --mode=http \
         --request-patterns-file=$PWD/patterns-1node.json \
         --default-host=192.168.200.254 \
@@ -231,7 +232,28 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
         --default-timeout=5 \
         --output-path=$PWD/groonga-result.csv
 
+    (on 192.168.200.254)
+    % pkill groonga
+
 ### Droongaのベンチマーク
+
+念のため、ベンチマークの取得の前後にはサーバを再起動しておく。
+
+    (on 192.168.200.254, 192.168.200.3, 192.168.200.4)
+    % kill $(cat ~/droonga/droonga-engine.pid)
+    % kill $(cat ~/droonga/droonga-http-server.pid)
+    % droonga-engine \
+        --host=$host \
+        --log-file=$DROONGA_BASE_DIR/droonga-engine.log \
+        --daemon \
+        --pid-file=$DROONGA_BASE_DIR/droonga-engine.pid
+    % droonga-http-server \
+        --port=10042 \
+        --receive-host-name=$host \
+        --droonga-engine-host-name=$host \
+        --environment=production \
+        --daemon \
+        --pid-file=$DROONGA_BASE_DIR/droonga-http-server.pid
 
 #### 1ノード（192.168.200.254）
 
@@ -245,10 +267,11 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
     % drnbench-request-response \
         --n-slow-requests=5 \
         --start-n-clients=0 \
-        --end-n-clients=100 \
-        --step=10 \
+        --end-n-clients=50 \
+        --step=2 \
         --duration=10 \
         --wait=0.01 \
+        --interval=10 \
         --mode=http \
         --request-patterns-file=$PWD/patterns-1node.json \
         --default-host=192.168.200.254 \
@@ -268,10 +291,11 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
     % drnbench-request-response \
         --n-slow-requests=5 \
         --start-n-clients=0 \
-        --end-n-clients=100 \
-        --step=10 \
+        --end-n-clients=50 \
+        --step=2 \
         --duration=10 \
         --wait=0.01 \
+        --interval=10 \
         --mode=http \
         --request-patterns-file=$PWD/patterns-2nodes.json \
         --default-host=192.168.200.254 \
@@ -291,10 +315,11 @@ droonga-engineやdroonga-http-serverのプロセスがボトルネックにな�
     % drnbench-request-response \
         --n-slow-requests=5 \
         --start-n-clients=0 \
-        --end-n-clients=100 \
-        --step=10 \
+        --end-n-clients=50 \
+        --step=2 \
         --duration=10 \
         --wait=0.01 \
+        --interval=10 \
         --mode=http \
         --request-patterns-file=$PWD/patterns-3nodes.json \
         --default-host=192.168.200.254 \
