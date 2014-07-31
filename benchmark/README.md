@@ -155,9 +155,14 @@ https://github.com/droonga/wikipedia-search/blob/master/lib/wikipedia-search/tas
 ### データベースの用意
 
 ダンプからデータベースの内容を用意する。
+
 droonga-sendを使うが、スキーマ定義の時は宛先は1ノードだけにする。
 （複数ノードにリクエストを分散すると、スキーマ定義が期待通りに行われないため。
 データ投入の時は、負荷分散のため、宛先は3ノードに分散してもよい。
+
+なお、あまりに高速にメッセージを送りすぎると、受け側の処理能力が飽和してジョブキューでメモリを食い潰してしまう。
+そのため、処理能力を超えないように`--messages-per-second`オプションで流量を絞る必要がある。
+どこまでの流量を受け入れられるかはコンピュータの性能に依存するが、ここでは50qpsとしている。
 
     % time (cat ~/wikipedia-search/config/groonga/schema.grn | grn2drn | \
               droonga-send --server=192.168.200.254)
@@ -166,7 +171,9 @@ droonga-sendを使うが、スキーマ定義の時は宛先は1ノードだけ�
     % time (cat ~/wikipedia-search/data/groonga/ja-pages.grn | grn2drn | \
               droonga-send --server=192.168.200.254 \
                            --server=192.168.200.3 \
-                           --server=192.168.200.4)
+                           --server=192.168.200.4 \
+                           --report-throughput \
+                           --messages-per-second=50)
 
 データベースの内容をダンプして直接流し込む場合も同様に、スキーマ定義とデータ投入で分散の有無を分ける必要がある。
 
@@ -178,7 +185,8 @@ droonga-sendを使うが、スキーマ定義の時は宛先は1ノードだけ�
               droonga-send --server=192.168.200.254 \
                            --server=192.168.200.3 \
                            --server=192.168.200.4 \
-                           --report-throughput)
+                           --report-throughput \
+                           --messages-per-second=50)
 
 検証環境では、30万件の移行だと12分を要した。
 
