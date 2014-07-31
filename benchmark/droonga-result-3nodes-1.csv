@@ -1,2 +1,0 @@
-n_clients,total_n_requests,queries_per_second,min_elapsed_time,max_elapsed_time,average_elapsed_time,0,200
-1,28,2.8,0.003594484,2.428470669,0.34733415160714276,3.571428571428571,96.42857142857143
