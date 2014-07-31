@@ -78,6 +78,8 @@ https://github.com/droonga/wikipedia-search/blob/master/lib/wikipedia-search/tas
    （変換には7分程度、Groongaへのロードには12分程度を要した）
  * 30万件のページを各ページごとに最大1000文字までロードすると、データベースは1.1GiB程度になった。
    （変換には17分程度、Groongaへのロードには6分程度を要した）
+ * 150万件のページを各ページごとに最大1000文字までロードすると、データベースは1.1GiB程度になった。
+   （変換には53分程度、Groongaへのロードには6分程度を要した）
 
 今回は30万件のページを各ページごとに最大1000文字まで変換したデータに基づく1.1GiBのデータベースを使用した。
 
@@ -191,14 +193,18 @@ droonga-sendを使うが、スキーマ定義の時は宛先は1ノードだけ�
 
 ページのタイトルから、検索リクエストのパターンファイルを作成する。
 
+    % base_params="table=Pages&limit=10&match_columns=title,text&output_columns=snippet_html(title),snippet_html(text),categories,_key"
     % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=200&output_columns=title" | \
-        ruby ./generate-patterns.rb \
+        drnbench-extract-searchterms | \
+        drnbench-generate-select-patterns --base-params="$base_params" \
         > ./patterns-1node.json
     % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=200&output_columns=title" | \
-        ruby ./generate-patterns.rb 192.168.200.254,192.168.200.3 \
+        drnbench-extract-searchterms | \
+        drnbench-generate-select-patterns --base-params="$base_params" --hosts=192.168.200.254,192.168.200.3 \
         > ./patterns-2nodes.json
     % curl "http://192.168.200.254:10041/d/select?table=Pages&limit=200&output_columns=title" | \
-        ruby ./generate-patterns.rb 192.168.200.254,192.168.200.3,192.168.200.4 \
+        drnbench-extract-searchterms | \
+        drnbench-generate-select-patterns --base-params="$base_params" --hosts=192.168.200.254,192.168.200.3,192.168.200.4 \
         > ./patterns-3nodes.json
 
 patterns-2nodes.json, patterns-3nodes.jsonは、接続先をそれぞれのノードに等分に振り分けるようにした物。
