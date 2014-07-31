@@ -1,6 +1,6 @@
 # はじめてのDroonga
 
-TODO: スライドの説明
+Droonga Meetupで発表した、Groongaユーザ向けのDroongaの簡単な紹介と、Groongaを利用したアプリケーションをDroongaに移行する手順の解説です。
 
 ## 作者向け
 
