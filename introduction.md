@@ -305,40 +305,67 @@ Droongaのインストール
 
 # Groongaとの性能比較
 
- * 検索対象：
-   Wikipedia日本語版のページ30万件
-   （データベースサイズ 約1.1GiB）
- * 検索クエリ：
-   ページのタイトル200件
-   （キャッシュヒット率50％）
+検索対象
+:   Wikipedia日本語版のページ
+    30万件/150万件
+    （データベースサイズ 1.1GiB/4.3GiB）
+
+検索クエリ
+:   ページのタイトル200件
+    （キャッシュヒット率50％）
+
 
 [ベンチマーク取得手順](https://github.com/droonga/presentation-droonga-meetup-1-introduction/tree/master/benchmark)
 
 # Groongaとの性能比較
 
-![](images/benchmark-300K-throughput.png){:relative_height='90'}
+![](images/benchmark-300K-throughput.png "スループット（30万件）"){:relative_height='90'}
 
 # Groongaとの性能比較
 
-![](images/benchmark-300K-elapsedtime.png){:relative_height='90'}
+![](images/benchmark-1.5M-throughput.png "スループット（150万件）"){:relative_height='90'}
 
 # Groongaとの性能比較
 
- * Groonga
-   * サーバ1台の処理能力では有利
-   * 負荷が増えた時に
-     スループットが頭打ちになる
- * Droonga
-   * サーバ1台の処理能力では不利
-   * 負荷が増えてもノードを増やして
-     スループットの上限を増やせる
+![](images/benchmark-300K-elapsedtime.png "レイテンシー（30万件）"){:relative_height='90'}
+
+# Groongaとの性能比較
+
+![](images/benchmark-1.5M-elapsedtime.png "レイテンシー（150万件）"){:relative_height='90'}
+
+# それぞれの傾向
+
+Groonga
+:   * サーバ1台の処理能力では有利
+    * 負荷が増えるとスループットが
+      頭打ちになる
+
+Droonga
+:   * サーバ1台の処理能力では不利
+    * ノード追加でスループットの
+      上限が増える
+
+# 傾向の分析
+
+検索処理そのものが軽い時
+:   * オーバーヘッドの影響が相対的に大
+    * Groongaの方が有利
+
+検索処理そのものが重い時
+:   * オーバーヘッドの影響が相対的に小
+    * Droongaの方が有利
+
+# Droongaの方が有利な場面
+
+ * データベースが大きい
+ * 重いクエリが多い
+ * ...
 
 # 今分かっている遅くなる理由
 
  * ドリルダウンがあると遅くなる
  * レスポンスのサイズが大きくなると遅くなる
- * クラスタ構成に合わせた
-   処理の最適化が不十分
+ * クラスタ構成に合わせた処理の最適化が不十分
 
 ## オーバーヘッド
 
